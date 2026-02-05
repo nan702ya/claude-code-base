@@ -1,4 +1,4 @@
-# Create Issue
+# Create Linear Issue
 
 User is mid-development and thought of a bug/feature/improvement. Capture it fast so they can keep working.
 
