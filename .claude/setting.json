@@ -1,24 +1,25 @@
 {
-    "permissions": {
-      "allow": [
-        "Read",
-        "WebSearch",
-        "WebFetch",
-        "Fetch",
-        "Bash",
-        "Skill"
-      ],
-      "deny": [
-        "Bash(rm -rf *)",
-        "Bash(sudo *)",
-        "Bash(chmod 777 *)",
-        "Bash(wget * | bash)"
-      ]
-    },
-    "statusLine": {
-      "type": "command",
-      "command": "node ~//.claude/plugins/cache/claude-dashboard/claude-dashboard/1.12.1/dist/index.js"
-    },
-    "teammateMode": "tmux"
-  }
-  
+  "language": "한국어",
+  "permissions": {
+    "allow": [
+      "Read",
+      "WebSearch",
+      "WebFetch",
+      "Fetch",
+      "Bash",
+      "Skill"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(sudo *)",
+      "Bash(chmod 777 *)",
+      "Bash(wget * | bash)",
+      "Read(~/.zshrc)"
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "node ~//.claude/plugins/cache/claude-dashboard/claude-dashboard/1.12.1/dist/index.js"
+  },
+  "teammateMode": "tmux"
+}
