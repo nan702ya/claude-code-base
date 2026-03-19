@@ -1,22 +1,204 @@
-A different team lead within the company has reviewed the current code/implementation and provided findings below. Important context:
+# Peer Review Skill
 
-- **They have less context than you** on this project's history and decisions
-- **You are the team lead** - don't accept findings at face value
-- Your job is to critically evaluate each finding
+다른 AI 모델(GPT, Gemini 등)에 교차 리뷰를 요청하고 결과를 수집한다.
 
-Findings from peer review:
+## 입력
 
-[PASTE FEEDBACK FROM OTHER MODEL]
+| 파라미터 | 필수 | 설명 |
+|----------|------|------|
+| `issue_id` | ✅ | 참조할 이슈번호 (예: SKT-42) |
+
+## 목적
+
+- 단일 모델의 맹점 보완
+- 다양한 관점에서의 검증
+- 도메인/로직 오류 조기 발견
+
+## 핵심 원리
+
+> "모델마다 성격이 다름. 서로 리뷰하면 더 많은 문제 발견"
+> - Claude: 소통형 CEO (맥락 이해, 아키텍처)
+> - GPT: 과묵한 천재 코더 (정확성, 엣지케이스)
+> - Gemini: 예술적 과학자 (창의적 대안, 패턴)
+
+## 수행 흐름
+
+```
+[Phase 1 — 프롬프트 생성]
+1. issue_id로 Linear 이슈 및 관련 파일 자동 조회
+     │
+     ▼
+2. 리뷰 요청 프롬프트 생성 (산출물 내용 자동 포함)
+     │
+     ▼
+3. 사용자에게 출력 (복사용)
+     │
+     ▼
+⏸  "위 내용을 다른 AI에 붙여넣고, 응답을 이 대화창에 붙여넣어 주세요." 출력 후 대기
+     │
+[Phase 2 — 응답 분석] (사용자가 AI 응답 붙여넣기 후 시작)
+     ▼
+4. 대화창에 붙여넣어진 다른 AI의 응답 읽기
+     │
+     ▼
+5. 응답 분석 및 유효 피드백 추출
+     │
+     ▼
+6. 조치 필요 항목 정리 → 이슈 코멘트 추가
+```
+
+> **중요**: Phase 1 완료 후 반드시 멈추고 사용자 입력을 기다린다.
+> Phase 2는 사용자가 다른 AI의 응답을 대화창에 붙여넣은 후에만 시작한다.
+
+## 리뷰 요청 프롬프트 생성
+
+issue_id로 **Linear 이슈를 조회**하여 산출물 내용을 자동 수집한다.
+(파일 경로가 이슈에 명시된 경우 해당 파일도 읽어 포함)
+
+### 템플릿
+
+```markdown
+## 교차 리뷰 요청
+
+아래 [산출물 유형]을 검토해 주세요.
+
+### 컨텍스트
+- 프로젝트: [프로젝트명]
+- 목적: [이 산출물의 목적]
+- 제약조건: [있다면]
+
+### 검토 대상
+
+[Linear 이슈 및 관련 파일에서 자동 수집한 내용을 여기에 삽입]
+
+### 검토 관점
+
+1. **정확성**: 로직/계산에 오류가 있는가?
+2. **완전성**: 누락된 케이스가 있는가?
+3. **일관성**: 기존 패턴/컨벤션과 충돌하는가?
+4. **도메인**: 비즈니스 관점에서 문제가 있는가?
+
+### 출력 형식
+
+각 발견 사항을 다음 형식으로 작성해 주세요:
+
+- **[심각도]** [위치] - [이슈 설명]
+  - 제안: [수정 방안]
+
+심각도: CRITICAL / HIGH / MEDIUM / LOW
+```
+
+## 출력 형식 (Phase 1 — 사용자에게)
+
+```markdown
+---
+## 🔄 Peer Review 요청 — Phase 1
+
+아래 내용을 **GPT/Gemini/다른 AI**에 붙여넣어 주세요.
+
+<복사 시작>
+─────────────────────────────────────
+[생성된 리뷰 요청 프롬프트]
+─────────────────────────────────────
+</복사 끝>
 
 ---
+⏸ **다른 AI의 응답을 받으면, 이 대화창에 그대로 붙여넣어 주세요.**
+응답을 받기 전까지 다음 단계를 진행하지 않습니다.
+---
+```
 
-For EACH finding above:
+## 응답 분석 (Phase 2 — 사용자가 붙여넣은 후 시작)
 
-1. **Verify it exists** - Actually check the code. Does this issue/bug really exist?
-2. **If it doesn't exist** - Explain clearly why (maybe it's already handled, or they misunderstood the architecture)
-3. **If it does exist** - Assess severity and add to your fix plan
+사용자가 대화창에 붙여넣은 다른 AI의 응답을 분석:
 
-After analysis, provide:
-- Summary of valid findings (confirmed issues)
-- Summary of invalid findings (with explanations)
-- Prioritized action plan for confirmed issues
+1. **유효 피드백 추출**: 실제 조치가 필요한 항목
+2. **중복 제거**: 이미 발견된 이슈와 중복 확인
+3. **우선순위 지정**: 심각도 기준 정렬
+4. **실행 가능성 판단**: 현재 범위 내 수정 가능 여부
+
+## 분석 결과 형식
+
+```markdown
+## Peer Review 분석 결과
+
+### 유효 피드백 (조치 필요)
+| # | 심각도 | 위치 | 이슈 | 조치 방안 |
+|---|--------|------|------|----------|
+| 1 | HIGH | file.py:42 | [이슈] | [방안] |
+| 2 | MEDIUM | config.yaml | [이슈] | [방안] |
+
+### 참고 사항 (조치 불필요)
+- [이미 처리됨 또는 범위 외]
+
+### 의견 불일치 (판단 필요)
+- [Claude vs 다른 AI 의견이 다른 부분]
+  - Claude: [의견]
+  - 다른 AI: [의견]
+  - **권장**: [최종 판단]
+```
+
+## 이슈 상태 업데이트
+
+- **시작 시**: `mcp__linear__save_issue`로 이슈 status → `in_progress`
+- **완료 시**: `mcp__linear__save_comment`로 코멘트 추가
+- **Medium 사이클 마지막 단계인 경우**: 코멘트 추가 후 `mcp__linear__save_issue`로 status → `done`
+
+## 이슈 업데이트
+
+peer-review 완료 시 이슈에 코멘트 추가:
+
+```markdown
+### ✅ Peer Review 완료 - [timestamp]
+
+**소요 시간**: [duration]
+**리뷰 모델**: [GPT-4 / Gemini / 기타]
+
+**분석 결과**:
+- 유효 피드백: [n]개
+- 조치 필요: [n]개
+- 의견 불일치: [n]개
+
+**주요 피드백**:
+- [피드백 1]
+- [피드백 2]
+
+**다음 단계**: document (Large) / 완료 (Medium) / execute (수정 필요 시)
+
+---
+이슈: [issue_id]
+```
+
+## Orchestrator 활용
+
+```
+review(issue_id) 완료
+    │
+    ▼
+Orchestrator: peer-review(issue_id) 호출
+    │
+    ▼
+리뷰 요청 프롬프트 생성 → 사용자에게 출력
+    │
+    ▼
+사용자: 다른 AI 응답 입력
+    │
+    ▼
+응답 분석 → 유효 피드백 추출
+    │
+    ▼
+이슈 코멘트 추가 (분석 결과)
+    │
+    ▼
+조치 필요 시 → execute(issue_id)로 복귀
+조치 불필요 시 → document(issue_id)로 이동 (Large) / 이슈 done 처리 (Medium)
+```
+
+## 스킵 조건
+
+다음 경우 peer-review 생략 가능:
+- **Small 작업**: 단순 수정, 1개 파일 변경
+- **긴급 핫픽스**: 시간이 중요한 경우
+- **이미 검증된 패턴**: 기존과 동일한 구조
+
+스킵 시에도 이슈에 "peer-review: skipped (사유)" 코멘트 추가.
