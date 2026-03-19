@@ -1,0 +1,12 @@
+{
+  "language": "en",
+  "plan": "max",
+  "displayMode": "custom",
+  "lines": [
+    ["model", "context", "rateLimit5h", "rateLimit7d", "rateLimit7dSonnet", "projectInfo"]
+  ],
+  "theme": "default",
+  "cache": {
+    "ttlSeconds": 60
+  }
+}
