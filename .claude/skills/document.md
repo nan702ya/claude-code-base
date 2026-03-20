@@ -76,7 +76,7 @@
 ## 이슈 상태 업데이트
 
 - **시작 시**: `mcp__linear__save_issue`로 이슈 status → `in_progress`
-- **완료 시**: `mcp__linear__save_comment`로 코멘트 추가 후 `mcp__linear__save_issue`로 status → `done`
+- **완료 시**: `mcp__linear__save_comment`로 코멘트 추가 후 `mcp__linear__save_issue`로 status → `done`, 이후 **브랜치 병합 및 정리** 수행
 
 ## 이슈 업데이트
 
@@ -133,4 +133,26 @@ CHANGELOG, HANDOFF 업데이트
 이슈 코멘트 추가 (문서화 결과)
     ↓
 이슈 status → done (워크플로 완료)
+    ↓
+브랜치 병합 및 정리
+```
+
+## 브랜치 병합 및 정리 (Large 사이클 완료 시)
+
+Large 사이클의 마지막 단계(document)에서 모든 작업이 완료되면, 작업 브랜치를 main에 병합하고 삭제한다.
+
+```bash
+# 1. main 최신화
+git checkout main
+git pull origin main
+
+# 2. 작업 브랜치 병합
+git merge [작업브랜치]  # 예: feature/SKT-42
+
+# 3. 원격 push
+git push origin main
+
+# 4. 작업 브랜치 삭제 (로컬 + 원격)
+git branch -d [작업브랜치]
+git push origin --delete [작업브랜치]  # 원격에 push한 경우
 ```

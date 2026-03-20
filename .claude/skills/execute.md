@@ -70,6 +70,32 @@ Orchestrator는 단계별로 적합한 서브 에이전트에 위임:
 - 원인 분석 후 plan 수정 또는 사용자 확인 요청
 - 이슈에 오류 상황 코멘트 추가
 
+## 브랜치 생성
+
+execute 시작 시 **반드시** 작업 브랜치를 확인하고, 없으면 생성한다.
+
+1. 현재 브랜치가 main인지 확인
+2. main이면 → `mcp__linear__get_issue`로 이슈 라벨 확인 후 브랜치 생성:
+
+```bash
+git checkout main
+git pull origin main
+git checkout -b [prefix][issue_id]
+# 예: git checkout -b feature/SKT-42
+```
+
+| 라벨 | 브랜치 prefix |
+|------|--------------|
+| `Feature` | `feature/` |
+| `Bug` | `bug/` |
+| `Improvement` | `improvement/` |
+| `Chore` | `chore/` |
+| `Hotfix` | `hotfix/` |
+
+3. 이미 작업 브랜치에 있으면 → 그대로 진행
+
+> **라벨이 없는 경우**: 이슈 내용을 분석하여 라벨을 먼저 부여한 후 브랜치를 생성한다.
+
 ## 이슈 상태 업데이트
 
 - **시작 시**: `mcp__linear__save_issue`로 이슈 status → `in_progress`
