@@ -15,10 +15,10 @@ cp "$SOURCE_CLAUDE/setting.json" "$TARGET_GLOBAL/"
 echo "  Copied claude-dashboard.local.json -> $TARGET_GLOBAL/"
 echo "  Copied setting.json -> $TARGET_GLOBAL/"
 
-# Copy commands/ to ~/.claude/commands/
-mkdir -p "$TARGET_GLOBAL/commands"
-cp "$SOURCE_CLAUDE/commands/"*.md "$TARGET_GLOBAL/commands/"
-echo "  Copied commands/ -> $TARGET_GLOBAL/commands/"
+# Copy skills/ to ~/.claude/skills/
+mkdir -p "$TARGET_GLOBAL/skills"
+cp "$SOURCE_CLAUDE/skills/"*.md "$TARGET_GLOBAL/skills/"
+echo "  Copied skills/ -> $TARGET_GLOBAL/skills/"
 
 # Copy CLAUDE.md to parent ../.claude/
 mkdir -p "$TARGET_PARENT"
