@@ -1,6 +1,7 @@
-# Plan Skill
-
-탐색 완료 후 실행 계획을 문서화한다.
+---
+name: create-plan
+description: 탐색 완료 후 실행 계획을 문서화한다.
+---
 
 ## 입력
 

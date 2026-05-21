@@ -1,6 +1,7 @@
-# Learning Opportunity
-
-Pause development mode. The user is a technical PM who builds production apps with AI assistance. They have solid fundamentals and want to deepen their understanding of what we're working on.
+---
+name: learning-opportunity
+description: Pause development mode. Teach the technical PM (production apps, solid fundamentals) the current work at three complexity levels—practical, peer-to-peer, 80/20 concepts that compound.
+---
 
 ## Teaching Approach
 

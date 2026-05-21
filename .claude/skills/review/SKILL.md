@@ -1,6 +1,7 @@
-# Review Skill
-
-구현 완료 후 코드/결과물 검토를 수행한다.
+---
+name: review
+description: 구현 완료 후 코드/결과물 검토를 수행한다.
+---
 
 ## 입력
 
@@ -69,7 +70,6 @@
 
 - **시작 시**: `mcp__linear__save_issue`로 이슈 status → `in_progress`
 - **완료 시**: `mcp__linear__save_comment`로 코멘트 추가
-- **Small 사이클 마지막 단계인 경우**: 코멘트 추가 후 `mcp__linear__save_issue`로 status → `done`, 이후 **브랜치 병합 및 정리** 수행
 
 ## 이슈 업데이트
 
@@ -89,7 +89,10 @@
 **발견된 이슈** (있으면):
 - [심각도] [위치] - [설명]
 
-**다음 단계**: peer-review / execute (수정 필요 시)
+**다음 단계**:
+- 이슈 있음 → execute
+- 이슈 없음 + Small 사이클 → close-issue
+- 이슈 없음 + Medium/Large 사이클 → peer-review
 
 ---
 이슈: [issue_id]
@@ -107,28 +110,7 @@ Orchestrator: review(issue_id) 호출
 이슈 코멘트 추가 (검토 결과)
     ↓
 이슈 있으면 → execute(issue_id)로 복귀
-이슈 없으면 → peer-review(issue_id)로 이동
+이슈 없으면 →
+  Small 사이클  : /close-issue [issue_id]
+  Medium/Large : /peer-review [issue_id]
 ```
-
-## 브랜치 병합 및 정리 (사이클 완료 시)
-
-Small 사이클의 마지막 단계(review)에서 모든 검토가 통과되면, 작업 브랜치를 main에 병합하고 삭제한다.
-
-```bash
-# 1. main 최신화
-git checkout main
-git pull origin main
-
-# 2. 작업 브랜치 병합
-git merge [작업브랜치]  # 예: feature/SKT-42
-
-# 3. 원격 push
-git push origin main
-
-# 4. 작업 브랜치 삭제 (로컬 + 원격)
-git branch -d [작업브랜치]
-git push origin --delete [작업브랜치]  # 원격에 push한 경우
-```
-
-> **주의**: review에서 이슈가 발견되어 execute로 복귀하는 경우에는 병합하지 않는다.
-> 병합은 **모든 검토 통과 + 이슈 done 처리 후**에만 수행한다.

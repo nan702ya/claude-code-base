@@ -1,6 +1,7 @@
-# Document Skill
-
-변경사항 문서화 및 Context 전달 문서 작성을 수행한다.
+---
+name: document
+description: 변경사항 문서화 및 Context 전달 문서 작성을 수행한다.
+---
 
 ## 입력
 
@@ -11,6 +12,7 @@
 ## 목적
 
 - 변경사항 기록 (CHANGELOG)
+- Repository README.md 파일 업데이트
 - Context 전달 문서 작성/업데이트 (HANDOFF.md)
 - 관련 문서 최신화
 
